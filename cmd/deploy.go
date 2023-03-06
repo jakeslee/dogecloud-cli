@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"dogecloud-cli/pkg/doge"
 	"fmt"
+	"github.com/jakeslee/dogecloud-cli/pkg/doge"
 	"github.com/spf13/cobra"
 	"io"
 	"log"

@@ -1,6 +1,6 @@
 package main
 
-import "dogecloud-cli/cmd"
+import "github.com/jakeslee/dogecloud-cli/cmd"
 
 func main() {
 	cmd.Execute()

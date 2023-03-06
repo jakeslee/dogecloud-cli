@@ -1,4 +1,4 @@
-module dogecloud-cli
+module github.com/jakeslee/dogecloud-cli
 
 go 1.19
 
