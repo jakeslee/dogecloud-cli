@@ -1,5 +1,13 @@
 # DogeCloud CLI
 
+## Install
+
+```shell
+go install github.com/jakeslee/dogecloud-cli
+```
+
+## Use
+
 ```shell
 ./dogecloud-cli
 A DogeCloud commandLine tool
