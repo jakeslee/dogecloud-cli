@@ -1,6 +1,6 @@
 package main
 
-import "dogecdn-deloy/cmd"
+import "dogecloud-cli/cmd"
 
 func main() {
 	cmd.Execute()

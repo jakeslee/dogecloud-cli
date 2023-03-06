@@ -1,4 +1,4 @@
-module dogecdn-deloy
+module dogecloud-cli
 
 go 1.19
 

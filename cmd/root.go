@@ -4,7 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"dogecdn-deloy/pkg/doge"
+	"dogecloud-cli/pkg/doge"
 	"os"
 
 	"github.com/spf13/cobra"

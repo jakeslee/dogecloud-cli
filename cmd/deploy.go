@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"dogecdn-deloy/pkg/doge"
+	"dogecloud-cli/pkg/doge"
 	"fmt"
 	"github.com/spf13/cobra"
 	"io"
