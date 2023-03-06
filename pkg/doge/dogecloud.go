@@ -76,60 +76,47 @@ func FetchResult(apiPath string, data map[string]interface{}, jsonMode bool) (re
 }
 
 func ListDomains() ([]string, error) {
-	r := FetchResult("/cdn/domain/list.json", make(map[string]interface{}), false)
-	data := r["data"].(map[string]interface{})
-	domains := data["domains"].([]interface{})
+	var result Response[struct {
+		Domains []*Domains `json:"domains"`
+	}]
 
+	Fetch("/cdn/domain/list.json", make(map[string]interface{}), false, &result)
 	var ret []string
 
-	for _, d := range domains {
-		dm := d.(map[string]interface{})
-		if dm["status"] == "online" {
-			ret = append(ret, dm["name"].(string))
+	for _, domain := range result.Data.Domains {
+		if domain.Status == "online" {
+			ret = append(ret, domain.Name)
 		}
 
-		log.Printf("[%d]%-23sstatus: %s\t ctime: %s\n", int(dm["id"].(float64)), dm["name"], dm["status"], dm["ctime"])
+		log.Printf("[%d]%-23sstatus: %s\t ctime: %s\n", domain.ID, domain.Name, domain.Status, domain.Ctime)
 	}
 
 	return ret, nil
 }
 
 func UploadCert(name, cert, key string) (int, error) {
+	var result Response[struct {
+		Id int `json:"id"`
+	}]
+
 	params := make(map[string]interface{})
 	params["note"] = name
 	params["cert"] = cert
 	params["private"] = key
 
-	r := FetchResult("/cdn/cert/upload.json", params, false)
+	Fetch("/cdn/cert/upload.json", params, false, &result)
 
-	if r["code"].(float64) != 200 {
-		return 0, fmt.Errorf("error: %s", r["msg"])
+	if result.Code != 200 {
+		return 0, fmt.Errorf("error: %s", result.Msg)
 	}
 
-	return int(r["data"].(map[string]interface{})["id"].(float64)), nil
-}
-
-type Cert struct {
-	Id     int       `json:"id"`
-	Name   string    `json:"name"`
-	Count  int       `json:"domainCount"`
-	Expire int       `json:"expire"`
-	Info   *CertInfo `json:"info"`
-}
-
-type CertInfo struct {
-	SAN    []string `json:"SAN"`
-	Type   string   `json:"type"`
-	Period string   `json:"period"`
+	return result.Data.Id, nil
 }
 
 func ListCerts() []*Cert {
-	type Body struct {
-		Data struct {
-			Certs []*Cert `json:"certs"`
-		} `json:"data"`
-	}
-	var result Body
+	var result Response[struct {
+		Certs []*Cert `json:"certs"`
+	}]
 
 	Fetch("/cdn/cert/list.json", make(map[string]interface{}), false, &result)
 
