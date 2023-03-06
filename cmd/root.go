@@ -1,28 +1,36 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
-	"github.com/jakeslee/dogecloud-cli/pkg/doge"
+	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
 )
 
+var (
+	Version   string
+	BuildTime string
+)
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "dogecdn-deloy",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Use:   "dogecloud-cli",
+	Short: "A DogeCloud commandLine tool",
+	PreRun: func(cmd *cobra.Command, args []string) {
+		v, _ := cmd.Flags().GetBool("version")
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+		if !v {
+			cmd.Help()
+			os.Exit(0)
+		}
+	},
+	Run: func(cmd *cobra.Command, args []string) {
+		v, _ := cmd.Flags().GetBool("version")
+
+		if v {
+			fmt.Fprintf(os.Stdout, "version: %s, build at: %s\n", Version, BuildTime)
+		}
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -39,12 +47,9 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.dogecdn-deloy.yaml)")
+	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.dogecloud-cli.yaml)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.PersistentFlags().StringVarP(&doge.AccessKey, "access-key", "k", "", "AccessKey for DogeCloud")
-	rootCmd.PersistentFlags().StringVarP(&doge.SecretKey, "secret-key", "s", "", "SecretKey for DogeCloud")
-	rootCmd.MarkPersistentFlagRequired("access-key")
-	rootCmd.MarkPersistentFlagRequired("secret-key")
+	rootCmd.Flags().BoolP("version", "v", false, "version of program")
 }

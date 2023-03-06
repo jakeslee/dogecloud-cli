@@ -25,6 +25,10 @@ var deployCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(deployCmd)
+	deployCmd.Flags().StringVarP(&doge.AccessKey, "access-key", "k", "", "AccessKey for DogeCloud")
+	deployCmd.Flags().StringVarP(&doge.SecretKey, "secret-key", "s", "", "SecretKey for DogeCloud")
+	deployCmd.MarkFlagRequired("access-key")
+	deployCmd.MarkFlagRequired("secret-key")
 }
 
 func run(cert, key string) {
