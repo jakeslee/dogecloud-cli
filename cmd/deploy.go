@@ -62,7 +62,7 @@ func run(cert, key string) {
 	log.Printf("new cert id: %d", certId)
 
 	log.Printf("deploying cert to domains: %s", strings.Join(domains, ","))
-	//doge.DomainCertDeploy(certId, domains)
+	doge.DomainCertDeploy(certId, domains)
 
 	log.Printf("cleaning unused certs...")
 	for _, certObj := range doge.ListCerts() {
